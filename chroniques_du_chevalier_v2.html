@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#17202b">
+<title>Les Chroniques du Chevalier</title>
+<style>
+:root{--ink:#17202b;--panel:#222e3d;--panel2:#2d3b4d;--line:#526174;--gold:#f4c96b;--paper:#f5edda;--muted:#b9c4d0;--green:#8ee0a7;--red:#ff968b}
+*{box-sizing:border-box}html{background:var(--ink)}body{margin:0;color:var(--paper);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:linear-gradient(180deg,#25384a,#17202b 38%);min-height:100dvh;padding-bottom:calc(14px + env(safe-area-inset-bottom));image-rendering:pixelated}
+button{font:inherit;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.app{max-width:650px;margin:auto;padding:calc(10px + env(safe-area-inset-top)) 12px 20px}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.logo{font-size:11px;letter-spacing:1px;color:var(--gold);font-weight:bold}.stats{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.stat{font-size:11px;background:#111923;border:1px solid #3d4c5f;border-radius:5px;padding:6px 7px}
+h1{font-size:clamp(23px,6vw,33px);line-height:1.1;margin:9px 0 4px;color:#fff4d5} .intro{font-size:11px;line-height:1.5;color:var(--muted);margin:0 0 12px}
+.screen{display:none}.screen.active{display:block}
+.card{background:var(--panel);border:2px solid var(--line);border-radius:8px;padding:12px;margin:10px 0;box-shadow:0 4px 0 #0d131b}
+.scene{height:205px;position:relative;overflow:hidden;border:3px solid #7d8a7c;border-radius:5px;background:#7f9b8b;image-rendering:pixelated}
+.sky{position:absolute;inset:0 0 45% 0;background:linear-gradient(#526f88,#a8b9a0)}.sun{position:absolute;right:10%;top:12%;width:27px;height:27px;background:#ffe59b;box-shadow:0 0 0 6px #ffe59b33}
+.hill{position:absolute;left:-10%;right:-10%;bottom:35%;height:80px;background:#627c68;clip-path:polygon(0 100%,0 55%,18% 15%,33% 62%,51% 0,70% 62%,84% 18%,100% 60%,100% 100%)}
+.ground{position:absolute;bottom:0;height:43%;width:100%;background:repeating-linear-gradient(0deg,#435e48 0 10px,#4c6b50 10px 20px);border-top:5px solid #c4ae77}
+.path{position:absolute;bottom:-5px;left:38%;height:70%;width:24%;background:#a58a5e;clip-path:polygon(35% 0,65% 0,100% 100%,0 100%);opacity:.9}
+.pixel{position:absolute;font-size:42px;line-height:1;filter:drop-shadow(2px 3px 0 #20252a);z-index:2}.knight{left:28%;bottom:22%}.creature{right:22%;bottom:21%;font-size:37px}.sceneLabel{position:absolute;left:8px;top:8px;z-index:4;background:#17202bdd;padding:6px 7px;font-size:10px;border:1px solid #d6d2b4}
+.sceneHint{position:absolute;z-index:4;bottom:8px;left:8px;right:8px;text-align:center;background:#17202bdc;padding:6px;font-size:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}.row.wrap{flex-wrap:wrap}.small{font-size:10px;color:var(--muted);line-height:1.5}.gold{color:var(--gold)}.title2{font-size:15px;font-weight:bold;margin:4px 0 8px}.bar{height:8px;background:#111923;border:1px solid #536174;border-radius:2px;overflow:hidden;margin:7px 0}.bar>i{display:block;height:100%;width:0;background:var(--gold);transition:width .2s}
+.btn{border:2px solid #65768b;background:#35465b;color:#fff5df;padding:11px 10px;border-radius:5px;text-align:left;font-size:12px;line-height:1.4;box-shadow:0 3px 0 #111923;min-height:42px}.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #111923}.btn.primary{background:#795c31;border-color:#d8b35d}.btn.green{background:#285944;border-color:#69b58b}.btn.red{background:#713c43;border-color:#c77c78}.btn:disabled{opacity:.45}.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.btnfull{width:100%;margin-top:8px}.mapgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:10px}.tile{aspect-ratio:1;border:1px solid #5c6c7d;background:#354b42;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:white;font-size:18px;position:relative;padding:2px}.tile small{font-size:8px;color:#e4e2d2}.tile.locked{background:#202936;color:#657182}.tile.here{border:2px solid var(--gold);background:#6c603d}.tile.done{background:#285943}.tile.boss{background:#57383d}.tile:disabled{opacity:.8}
+.answers{display:grid;gap:7px;margin-top:10px}.notice{min-height:30px;padding:8px;background:#121a24;border:1px solid #435167;font-size:11px;line-height:1.5;margin-top:10px}.good{color:var(--green)}.bad{color:var(--red)}.riddle{font-size:12px;line-height:1.65;color:#e6e5db}.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.nav button{text-align:center}.tag{border:1px solid #6a7685;padding:4px 6px;border-radius:3px;font-size:10px}.footer{text-align:center;color:#7f8c9d;font-size:9px;line-height:1.6;margin-top:15px}
+@media(min-width:500px){.scene{height:250px}.mapgrid{grid-template-columns:repeat(10,1fr)}}
+</style>
+</head>
+<body><div class="app">
+<header><div class="logo">⚔ CHRONIQUES DU CHEVALIER</div><div class="stats"><span class="stat">❤️ <b id="hp">3</b></span><span class="stat">🪙 <b id="coins">0</b></span><span class="stat">✦ <b id="xp">0</b></span></div></header>
+<div class="row wrap"><div><h1>Les 100 épreuves</h1><p class="intro">Un royaume à explorer. Des énigmes à résoudre. Des créatures à vaincre.</p></div><span class="tag" id="saveTag">Sauvegarde locale</span></div>
+<div class="screen active" id="home">
+ <div class="scene"><div class="sky"></div><div class="sun"></div><div class="hill"></div><div class="ground"></div><div class="path"></div><div class="sceneLabel">ROYAUME DE VALBRUME</div><div class="pixel knight">🛡️</div><div class="pixel creature">🐉</div><div class="sceneHint">« Le courage commence par une question. »</div></div>
+ <div class="card"><div class="row"><span class="title2">Ta légende commence ici</span><span class="gold" id="homeProgress">0 / 100</span></div><div class="bar"><i id="homeBar"></i></div><p class="small">Explore la carte, rencontre des habitants, résous des mini-jeux et bats les créatures pour libérer les 5 régions du royaume.</p><div class="btnrow"><button class="btn primary" onclick="show('map')">🗺️ Explorer le royaume</button><button class="btn" onclick="show('how')">📜 Comment jouer</button></div></div>
+ <div class="card"><div class="title2">Dernière rumeur</div><p class="small" id="rumor">Un gardien ancien protège la route du château. On dit que la logique est plus forte que l'acier…</p></div>
+</div>
+<div class="screen" id="map">
+ <div class="card"><div class="row"><span class="title2">🗺️ Carte du royaume</span><span class="tag" id="mapCount">0/100 libérées</span></div><p class="small">Choisis une case accessible. Les régions se dévoilent au fil de ta progression.</p><div class="mapgrid" id="mapgrid"></div><div class="small" style="margin-top:8px">🟩 terminée · 🟨 ta position · 🟥 gardien · ⬛ verrouillée</div></div>
+ <button class="btn btnfull" onclick="show('home')">← Retour au camp</button>
+</div>
+<div class="screen" id="level">
+ <div class="scene" id="levelScene"><div class="sky"></div><div class="sun"></div><div class="hill"></div><div class="ground"></div><div class="path"></div><div class="sceneLabel" id="region">BRUMEFORÊT</div><div class="pixel knight">🛡️</div><div class="pixel creature" id="mob">🐺</div><div class="sceneHint" id="hint">Une rencontre t'attend…</div></div>
+ <div class="card"><div class="row"><span class="tag" id="lvlNum">ÉPREUVE 1 / 100</span><span class="tag" id="kind">ÉNIGME</span></div><div class="title2" id="lvlTitle">Le sentier mystérieux</div><div class="bar"><i id="lvlBar"></i></div><p class="riddle" id="question"></p><div id="gameArea"></div><div class="notice" id="feedback" aria-live="polite">Choisis avec sagesse, chevalier.</div></div>
+ <div class="btnrow"><button class="btn" onclick="show('map')">🗺️ Carte</button><button class="btn" onclick="show('home')">🏕️ Camp</button></div>
+</div>
+<div class="screen" id="how"><div class="card"><div class="title2">📜 Règles de l'aventure</div><p class="small">• Chaque épreuve est un défi : énigme, observation, mémoire, calcul ou combat tactique.</p><p class="small">• Une bonne réponse rapporte de l'expérience et des pièces. Les gardiens sont plus coriaces tous les 10 niveaux.</p><p class="small">• Une mauvaise réponse coûte un cœur. Au camp, tu peux récupérer tes forces gratuitement.</p><p class="small">• La progression est sauvegardée sur cet appareil grâce au navigateur. Évite d'effacer les données du site si tu veux la garder.</p><p class="small">• Cette version fonctionne hors ligne une fois le fichier téléchargé, si le navigateur iPhone autorise l'ouverture locale.</p><button class="btn primary btnfull" onclick="show('map')">Compris, partons !</button></div></div>
+<div class="footer">Prototype gratuit • 2D rétro • Solo • Français<br>Version de démonstration : les défis sont jouables, sans achat intégré ni compte.</div>
+</div>
+<script>
+const regions=[
+ {name:"Brumeforêt",emoji:"🌲",mob:"🐺",boss:"🐗",desc:"Les sentiers brumeux cachent de vieilles runes."},
+ {name:"Les Marais d'Onyx",emoji:"🐊",mob:"🐍",boss:"👹",desc:"Les eaux sombres abritent des créatures rusées."},
+ {name:"Les Pics de Givre",emoji:"❄️",mob:"🧊",boss:"🐻",desc:"Le froid ralentit les pas et aiguise l'esprit."},
+ {name:"Les Ruines d'Azur",emoji:"🏛️",mob:"🦇",boss:"🗿",desc:"Des mécanismes anciens protègent les reliques."},
+ {name:"Le Château des Ombres",emoji:"🏰",mob:"👻",boss:"🐉",desc:"Le dernier gardien attend au cœur du château."}
+];
+const base=[
+["Le loup d'ombre","Le loup recule devant la lumière, mais fonce sur les gestes brusques. Que fais-tu ?",["Lever la torche et avancer lentement","Courir vers lui l'épée levée","Lui tourner le dos"],0,"🧠 Énigme"],
+["La suite des runes","Observe la suite : soleil, lune, soleil, lune… Quel symbole vient ensuite ?",["☀️ Soleil","🌙 Lune","⭐ Étoile"],0,"🔎 Observation"],
+["Le troll affamé","« Je nais d'une étincelle, je danse sans jambes et l'eau me dévore. Qui suis-je ? »",["Le feu","La pierre","Le vent"],0,"🧩 Devinette"],
+["La serrure du roi","Le code est pair, supérieur à 6 et inférieur à 10. Quel est le code ?",["7","8","9"],1,"🔢 Logique"],
+["Le basilic","Le basilic pétrifie ceux qui croisent son regard. Comment passer ?",["Utiliser le reflet du bouclier","Le fixer dans les yeux","Courir les yeux fermés"],0,"⚔️ Tactique"],
+["Le coffre royal","Un seul coffre contient la clé. Le coffre A dit « la clé est ici ». Le coffre B dit « la clé n'est pas ici ». Une seule inscription est vraie. Où est la clé ?",["Coffre A","Coffre B","Impossible à savoir"],1,"🧠 Déduction"],
+["Le spectre","Le spectre ne craint pas l'acier, mais les serments tenus. Quelle est ta meilleure arme ?",["Promettre de protéger le village et tenir parole","Frapper plus fort","Jeter ton épée"],0,"💬 Choix"],
+["L'hydre","L'hydre attaque dans cet ordre : gauche, droite, milieu, puis recommence. Après droite, quelle tête attaque ?",["Gauche","Milieu","Droite"],1,"🧠 Mémoire"],
+["Les leviers","Rouge doit être avant bleu, bleu avant vert. Quel ordre ouvre la porte ?",["Vert, bleu, rouge","Rouge, bleu, vert","Bleu, rouge, vert"],1,"⚙️ Mécanisme"],
+["Le dragon de cendre","Le dragon souffle du feu puis reprend son souffle. Quand traverser le pont ?",["Pendant le souffle","Juste après son attaque","En restant devant sa gueule"],1,"🐉 Combat tactique"]
+];
+const extra=[
+["Le marchand distrait","Une potion coûte 4 pièces. Tu en achètes 2 avec 10 pièces. Combien te rend le marchand ?",["1 pièce","2 pièces","4 pièces"],1,"🪙 Calcul"],
+["La porte des nombres","Quel nombre manque : 3, 6, 12, 24, … ?",["30","36","48"],2,"🔢 Logique"],
+["La lanterne","Tu as une allumette et une lanterne vide. Que faut-il allumer en premier ?",["La lanterne","L'allumette","Le feu de camp"],1,"🧩 Devinette"],
+["Le garde endormi","Le garde dort une minute sur deux. Tu l'observes pendant deux minutes. Quelle conclusion est certaine ?",["Il dort tout le temps","Il dort au moins une minute","Il ne dort jamais"],1,"🧠 Déduction"],
+["Le passage secret","Tu avances vers le nord, puis l'est, puis le sud. Dans quelle direction générale dois-tu aller pour revenir à l'ouest du point de départ ?",["Ouest","Nord","Sud"],0,"🧭 Orientation"]
+];
+const creatures=["🐺","🦇","🐍","👹","🕷️","🧟","🦂","🦎","👻","🐉"];
+let state={cleared:0,hp:3,xp:0,coins:0,unlocked:1,done:[],current:0,combo:0};
+try{const s=JSON.parse(localStorage.getItem("chroniques2-save"));if(s)state={...state,...s}}catch(e){}
+function persist(){try{localStorage.setItem("chroniques2-save",JSON.stringify(state));document.getElementById("saveTag").textContent="✓ Sauvegardé"}catch(e){document.getElementById("saveTag").textContent="Sauvegarde indisponible"}updateStats()}
+function updateStats(){["hp","coins","xp"].forEach(k=>document.getElementById(k).textContent=state[k]);document.getElementById("homeProgress").textContent=state.cleared+" / 100";document.getElementById("homeBar").style.width=state.cleared+"%";document.getElementById("mapCount").textContent=state.cleared+"/100 libérées"}
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");if(id==="map")drawMap();if(id==="home")updateStats();window.scrollTo(0,0)}
+function drawMap(){let g=document.getElementById("mapgrid");g.innerHTML="";for(let n=1;n<=100;n++){let b=document.createElement("button");let done=state.done.includes(n),open=n<=state.unlocked,here=n===state.current+1;let boss=n%10===0;b.className="tile"+(done?" done":here?" here":boss?" boss":"")+(open?"":" locked");b.disabled=!open;b.innerHTML=(done?"✓":here?"🛡️":boss?"👹":open?regions[Math.floor((n-1)/20)].emoji:"🔒")+"<small>"+n+"</small>";b.onclick=()=>startLevel(n-1);g.appendChild(b)}}
+function makeLevel(n){let r=Math.floor(n/20),idx=n%base.length;let data=base[idx].slice();if(n>=15){let e=extra[(n-15)%extra.length];data=e.slice()}if(n>=20){let diff=Math.floor(n/20);data[0]=["Épreuve du "+regions[r].name,n<40?"Les signes se ressemblent. Choisis la réponse qui respecte la règle.":n<60?"Le gardien te met à l'épreuve : analyse les indices avant d'agir.":n<80?"Seul un esprit attentif peut déjouer ce piège ancien.":"Le dernier royaume ne pardonne aucune décision hâtive."][0];if(n%3===0){data[1]=`Le gardien ${regions[r].mob} bloque le passage. Quelle approche est la plus prudente ?`;data[2]=["Observer son rythme avant d'agir","Attaquer sans regarder","Ignorer les indices"];data[3]=0;data[4]="⚔️ Combat tactique"}}
+if(n%10===9){data[0]="Le gardien de "+regions[r].name;data[1]=`Le grand gardien ${regions[r].boss} protège la région. Pour le vaincre, il faut garder son calme et choisir la stratégie la plus sûre.`;data[2]=["Étudier ses mouvements puis riposter","Frapper au hasard sans défense","Fuir et abandonner le royaume"];data[3]=0;data[4]="👑 Boss régional"}
+if(n>=80&&n%10!==9){data[1]+=" Attention : cette épreuve est avancée. Prends le temps de lire tous les indices.";if(n%2===0){data[2]=["Vérifier chaque indice avant de choisir","Répondre au hasard","Ignorer la question"];data[3]=0}}
+return {name:data[0],q:data[1],opts:data[2],ans:data[3],kind:data[4],region:regions[r],mob:n%10===9?regions[r].boss:regions[r].mob}}
+function startLevel(n){if(n>=state.unlocked)return;state.current=n;persist();renderLevel();show("level")}
+function renderLevel(){let n=state.current,d=makeLevel(n);document.getElementById("region").textContent=d.region.name.toUpperCase();document.getElementById("mob").textContent=d.mob;document.getElementById("hint").textContent=d.region.desc;document.getElementById("lvlNum").textContent=`ÉPREUVE ${n+1} / 100`;document.getElementById("kind").textContent=d.kind;document.getElementById("lvlTitle").textContent=d.name;document.getElementById("lvlBar").style.width=(n)+"%";document.getElementById("question").textContent=d.q;document.getElementById("feedback").textContent="Choisis avec sagesse, chevalier.";document.getElementById("feedback").className="notice";let area=document.getElementById("gameArea");area.innerHTML="";let a=document.createElement("div");a.className="answers";d.opts.forEach((o,i)=>{let b=document.createElement("button");b.className="btn"+(i===0?" primary":"");b.textContent=o;b.onclick=()=>answer(i);a.appendChild(b)});area.appendChild(a)}
+function answer(i){let n=state.current,d=makeLevel(n),fb=document.getElementById("feedback");if(i===d.ans){if(!state.done.includes(n+1)){state.done.push(n+1);state.cleared=state.done.length;state.xp+=10+Math.floor(n/10)*2;state.coins+=3+(n%10===9?10:0)}state.unlocked=Math.max(state.unlocked,Math.min(100,n+2));state.hp=Math.min(5,state.hp+((n%10===9)?1:0));state.combo++;fb.className="notice good";fb.textContent=(n%10===9?"🏆 Gardien vaincu ! ":"✓ Bien joué ! ")+`+${10+Math.floor(n/10)*2} XP et des pièces. ${d.region.name} se souviendra de toi.`;document.querySelectorAll("#gameArea button").forEach(b=>b.disabled=true);persist();document.getElementById("rumor").textContent=n===99?"Le royaume est libéré grâce à toi !":`Rumeur : ${regions[Math.floor(Math.min(n+1,99)/20)].desc}`;if(n===99){fb.textContent="🏆 VICTOIRE ! Tu as libéré Valbrume et terminé les 100 épreuves. Ta légende est gravée dans l'histoire."}let next=document.createElement("button");next.className="btn green btnfull";next.textContent=n===99?"🏰 Retour au royaume":"➡️ Continuer vers l'épreuve "+(n+2);next.onclick=()=>n===99?show("home"):startLevel(n+1);document.getElementById("gameArea").appendChild(next)}else{state.hp--;state.combo=0;fb.className="notice bad";fb.textContent="✗ Mauvaise réponse. Relis les indices, chevalier. Un cœur a été perdu.";if(state.hp<=0){state.hp=3;fb.textContent+=" Tu reprends ton souffle au camp : tes cœurs sont restaurés."}persist()}}
+function rest(){state.hp=3;persist()}
+updateStats();drawMap();
+</script></body></html>
